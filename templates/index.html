@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Классификация изображений</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        input[type="file"] {
+            margin-top: 10px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="{{ url_for('predict1') }}" method="POST" enctype="multipart/form-data">
+            <p>Модель TensorFlow</p>
+            <input type="file" name="file" accept="image/*"><br>
+            <button type="submit">Кнопка 1</button>
+        </form>
+
+        <form action="{{ url_for('predict2') }}" method="POST" enctype="multipart/form-data">
+            <p>Модель CNN</p>
+            <input type="file" name="file" accept="image/*"><br>
+            <button type="submit">Кнопка 2</button>
+        </form>
+
+        <form id="form3" action="{{ url_for('predict3') }}" method="POST" enctype="multipart/form-data">
+            <p>Модель YOLOV8 после переобучения</p>
+            <input type="file" name="file" accept="image/*"><br>
+            <button type="submit">Кнопка 3</button>
+        </form>
+    </div>
+
+    <script>
+      document.querySelector('#form3').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const response = await fetch('/predict3', {
+          method: 'POST',
+          body: formData
+        });
+        if (response.ok) {
+          window.location.href = '/results';
+        } else {
+          alert('Ошибка обработки изображения.');
+        }
+      });
+    </script>
+</body>
+</html>
